@@ -2,8 +2,10 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, TextInput, Text, View, FlatList, KeyboardAvoidingView, Platform, TouchableOpacity, Button ,Alert} from "react-native";
 import { useState, useEffect } from "react";
 
+
 import { app } from "./firebaseConfig";
 import { getDatabase, ref, push, onValue, remove, get } from "firebase/database";
+import { PaperProvider } from "react-native-paper";
 
 export default function App() {
   const [firstUnderlineColor, setFirstUnderlineColor] = useState("grey");
@@ -71,10 +73,11 @@ export default function App() {
 
 
   return (
+    <PaperProvider>
     <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={100}
+    style={styles.container}
+    behavior={Platform.OS === "ios" ? "padding" : "height"}
+    keyboardVerticalOffset={100}
     >
       <View style={styles.inputs}>
         <TextInput
@@ -86,7 +89,7 @@ export default function App() {
           value={product.title}
           placeholder="Product"
           keyboardType="default"
-        />
+          />
         <TextInput
           style={[styles.inputfield, { underlineColorAndroid: secondUnderlineColor }]}
           value={product.amount}
@@ -114,8 +117,9 @@ export default function App() {
           </View>}
         data={items} />
 
-      <StatusBar style="auto" />
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    <StatusBar style="auto" />
+    </PaperProvider>
   );
 }
 
