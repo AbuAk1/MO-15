@@ -1,11 +1,11 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, TextInput, Text, View, FlatList, KeyboardAvoidingView, Platform, TouchableOpacity, Button ,Alert} from "react-native";
+import { StyleSheet,  Text, View, FlatList, Alert} from "react-native";
 import { useState, useEffect } from "react";
 
 
 import { app } from "./firebaseConfig";
 import { getDatabase, ref, push, onValue, remove, get } from "firebase/database";
-import { Appbar, PaperProvider } from "react-native-paper";
+import { Appbar, PaperProvider , TextInput, Button} from "react-native-paper";
 
 export default function App() {
   const [firstUnderlineColor, setFirstUnderlineColor] = useState("grey");
@@ -74,14 +74,17 @@ export default function App() {
 
   return (
     <PaperProvider>
-      <Appbar.Header theme={{ colors: { primary: 'green' } }}>
-        <Appbar.Content title="Title" mode="center-aligned" />
+    
+      <Appbar.Header  >
+        <Appbar.Content style={{backgroundColor:'blue'}} titleStyle={{color:"white", textAlign: "center"}} title="Shopping List" mode="large" />
       </Appbar.Header>
+    
       <View style={styles.container}>
       <View style={styles.inputs}>
         <TextInput
           style={[styles.inputfield, { underlineColorAndroid: firstUnderlineColor }]}
           underlineColorAndroid={firstUnderlineColor}
+          label="Product"
           onFocus={handleFirstFocus}
           onBlur={handleFirstBlur}
           onChangeText={text => setProduct({ ...product, title: text })}
@@ -91,7 +94,9 @@ export default function App() {
           />
         <TextInput
           style={[styles.inputfield, { underlineColorAndroid: secondUnderlineColor }]}
+          label="Quantity"
           value={product.amount}
+          
           underlineColorAndroid={secondUnderlineColor}
           onFocus={handleSecondFocus}
           onBlur={handleSecondBlur}
@@ -101,8 +106,8 @@ export default function App() {
         />
       </View>
 
-      <View style={styles.buttons}>
-        <Button title="Save" onPress={handleSave} />
+      <View >
+        <Button mode="contained" icon="content-save" title="Save" onPress={handleSave} >Save</Button>
       </View>
 
       <Text style={styles.text}>Shopping List</Text>
@@ -116,8 +121,8 @@ export default function App() {
           </View>}
         data={items} />
 
-    <StatusBar style="auto" />
     </View>
+    <StatusBar style="auto" />
     
     </PaperProvider>
   );
@@ -128,8 +133,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     alignItems: "center",
-    backgroundColor: "white",
-    marginTop: "20%",
+    
   },
   inputs: {
     flexDirection: "column",
@@ -139,21 +143,20 @@ const styles = StyleSheet.create({
   inputfield: {
     width: "100%",
     borderWidth: 0.5,
-    borderBlockColor: "grey",
     padding: 10,
     marginVertical: 10,
   },
   buttons: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginTop: 20,
-    width: "50%",
+    // flexDirection: "row",
+    // justifyContent: "center",
+    // marginTop: 20,
+    // width: "50%",
   },
   text: {
     fontWeight: "bold",
     fontSize: 18,
     color: "#3458eb",
-    paddingTop: 20,
+    // paddingTop: 20,
   },
   item: {
     flexDirection: "row",
