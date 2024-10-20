@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 
 import { app } from "./firebaseConfig";
 import { getDatabase, ref, push, onValue, remove, get } from "firebase/database";
-import { PaperProvider } from "react-native-paper";
+import { Appbar, PaperProvider } from "react-native-paper";
 
 export default function App() {
   const [firstUnderlineColor, setFirstUnderlineColor] = useState("grey");
@@ -74,11 +74,10 @@ export default function App() {
 
   return (
     <PaperProvider>
-    <KeyboardAvoidingView
-    style={styles.container}
-    behavior={Platform.OS === "ios" ? "padding" : "height"}
-    keyboardVerticalOffset={100}
-    >
+      <Appbar.Header theme={{ colors: { primary: 'green' } }}>
+        <Appbar.Content title="Title" mode="center-aligned" />
+      </Appbar.Header>
+      <View style={styles.container}>
       <View style={styles.inputs}>
         <TextInput
           style={[styles.inputfield, { underlineColorAndroid: firstUnderlineColor }]}
@@ -117,8 +116,9 @@ export default function App() {
           </View>}
         data={items} />
 
-      </KeyboardAvoidingView>
     <StatusBar style="auto" />
+    </View>
+    
     </PaperProvider>
   );
 }
