@@ -1,11 +1,11 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet,  Text, View, FlatList, Alert} from "react-native";
+import { StyleSheet, Text, View, FlatList, Alert } from "react-native";
 import { useState, useEffect } from "react";
 
 
 import { app } from "./firebaseConfig";
 import { getDatabase, ref, push, onValue, remove, get } from "firebase/database";
-import { Appbar, PaperProvider , TextInput, Button} from "react-native-paper";
+import { Appbar, PaperProvider, TextInput, Button, Card } from "react-native-paper";
 
 export default function App() {
   const [firstUnderlineColor, setFirstUnderlineColor] = useState("grey");
@@ -39,8 +39,8 @@ export default function App() {
       if (data) {
         const dataItems = Object.keys(data).map(key => {
           return {
-            id: key,          
-            ...data[key]      
+            id: key,
+            ...data[key]
           };
         });
         // console.log(dataItems);
@@ -74,56 +74,70 @@ export default function App() {
 
   return (
     <PaperProvider>
-    
+
       <Appbar.Header  >
-        <Appbar.Content style={{backgroundColor:'blue'}} titleStyle={{color:"white", textAlign: "center"}} title="Shopping List" mode="large" />
+        <Appbar.Content style={{ backgroundColor: 'blue' }} titleStyle={{ color: "white", textAlign: "center" }} title="Shopping List" mode="large" />
       </Appbar.Header>
-    
+
       <View style={styles.container}>
-      <View style={styles.inputs}>
-        <TextInput
-          style={[styles.inputfield, { underlineColorAndroid: firstUnderlineColor }]}
-          underlineColorAndroid={firstUnderlineColor}
-          label="Product"
-          onFocus={handleFirstFocus}
-          onBlur={handleFirstBlur}
-          onChangeText={text => setProduct({ ...product, title: text })}
-          value={product.title}
-          placeholder="Product"
-          keyboardType="default"
+        <View style={styles.inputs}>
+          <TextInput
+            style={[styles.inputfield, { underlineColorAndroid: firstUnderlineColor }]}
+            underlineColorAndroid={firstUnderlineColor}
+            label="Product"
+            onFocus={handleFirstFocus}
+            onBlur={handleFirstBlur}
+            onChangeText={text => setProduct({ ...product, title: text })}
+            value={product.title}
+            mode="flat"
+            placeholder="Product"
+            keyboardType="default"
           />
-        <TextInput
-          style={[styles.inputfield, { underlineColorAndroid: secondUnderlineColor }]}
-          label="Quantity"
-          value={product.amount}
-          
-          underlineColorAndroid={secondUnderlineColor}
-          onFocus={handleSecondFocus}
-          onBlur={handleSecondBlur}
-          onChangeText={text => setProduct({ ...product, amount: text })}
-          placeholder="Quantity"
-          keyboardType="default"
-        />
+          <TextInput
+            style={[styles.inputfield, { underlineColorAndroid: secondUnderlineColor }]}
+            label="Quantity"
+            value={product.amount}
+
+            underlineColorAndroid={secondUnderlineColor}
+            onFocus={handleSecondFocus}
+            onBlur={handleSecondBlur}
+            mode="flat"
+            onChangeText={text => setProduct({ ...product, amount: text })}
+            placeholder="Quantity"
+            keyboardType="default"
+          />
+        </View>
+
+        <View >
+          <Button mode="contained" icon="content-save" title="Save" onPress={handleSave} >Save</Button>
+        </View>
+
+        {/* <Text style={styles.text}>Shopping List</Text> */}
+
+        <FlatList
+          renderItem={({ item }) =>
+
+            // <View style={styles.item}>
+            //   <Text style={{ fontSize: 18 }}>{item.title}, {item.amount} 
+            //   <Text style={styles.link} onPress={() => handleDelete(item)} > delete</Text>
+            //   </Text>
+            // </View>
+
+            <Card  >
+              <Card.Content  style={styles.item}>
+                
+                <Text >{item.title}, {item.amount}</Text>
+                <Text  style={styles.link} onPress={() => handleDelete(item)} > delete</Text>
+              </Card.Content >
+            </Card >
+
+
+          }
+          data={items} />
+
       </View>
+      <StatusBar style="auto" />
 
-      <View >
-        <Button mode="contained" icon="content-save" title="Save" onPress={handleSave} >Save</Button>
-      </View>
-
-      <Text style={styles.text}>Shopping List</Text>
-
-      <FlatList
-        renderItem={({ item }) =>
-          <View style={styles.item}>
-            <Text style={{ fontSize: 18 }}>{item.title}, {item.amount} 
-            <Text style={styles.link} onPress={() => handleDelete(item)} > delete</Text>
-            </Text>
-          </View>}
-        data={items} />
-
-    </View>
-    <StatusBar style="auto" />
-    
     </PaperProvider>
   );
 }
@@ -133,7 +147,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     alignItems: "center",
-    
+
   },
   inputs: {
     flexDirection: "column",
@@ -159,8 +173,8 @@ const styles = StyleSheet.create({
     // paddingTop: 20,
   },
   item: {
-    flexDirection: "row",
-    textAlign: 'left',
+    flexDirection: "column",
+    // textAlign: 'left',
     fontWeight: "bold",
     padding: 2,
     marginVertical: 2,
