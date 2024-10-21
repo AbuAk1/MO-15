@@ -5,28 +5,12 @@ import { useState, useEffect } from "react";
 
 import { app } from "./firebaseConfig";
 import { getDatabase, ref, push, onValue, remove, get } from "firebase/database";
-import {  PaperProvider, TextInput, Button, Card, Text } from "react-native-paper";
+import {  PaperProvider, TextInput, Button, Card, Text, IconButton } from "react-native-paper";
 
 import Bar  from "./Bar";
 
 export default function App() {
   
-  const [firstUnderlineColor, setFirstUnderlineColor] = useState("grey");
-  const [secondUnderlineColor, setsecondUnderlineColor] = useState("grey");
-
-  const handleFirstFocus = () => {
-    setFirstUnderlineColor("#03fcfc");
-  };
-  const handleFirstBlur = () => {
-    setFirstUnderlineColor("grey");
-  };
-  const handleSecondFocus = () => {
-    setsecondUnderlineColor("#03fcfc");
-  };
-  const handleSecondBlur = () => {
-    setsecondUnderlineColor("grey");
-  };
-
   const [product, setProduct] = useState({
     title: '',
     amount: ''
@@ -79,16 +63,14 @@ export default function App() {
       <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       <StatusBar style="light"  />
       
-      <View style={styles.container}>
       <Bar/>
+      <View style={styles.container}>
 
         <View style={styles.inputs}>
+
           <TextInput
-            style={[styles.inputfield, { underlineColorAndroid: firstUnderlineColor }]}
-            underlineColorAndroid={firstUnderlineColor}
+            style={styles.inputfield}
             label="Product"
-            onFocus={handleFirstFocus}
-            onBlur={handleFirstBlur}
             onChangeText={text => setProduct({ ...product, title: text })}
             value={product.title}
             mode="flat"
@@ -96,12 +78,9 @@ export default function App() {
             keyboardType="default"
           />
           <TextInput
-            style={[styles.inputfield, { underlineColorAndroid: secondUnderlineColor }]}
+            style={styles.inputfield}
             label="Quantity"
             value={product.amount}
-            underlineColorAndroid={secondUnderlineColor}
-            onFocus={handleSecondFocus}
-            onBlur={handleSecondBlur}
             mode="flat"
             onChangeText={text => setProduct({ ...product, amount: text })}
             placeholder="Quantity"
@@ -110,16 +89,27 @@ export default function App() {
         </View>
 
         <View >
-          <Button mode="contained" icon="content-save" title="Save" onPress={handleSave} >Save</Button>
+          <Button style={styles.savebutton} mode="contained" icon="content-save" title="Save" onPress={handleSave} >Save</Button>
         </View>
 
         <FlatList
           renderItem={({ item }) =>
             <Card  >
               <Card.Content style={styles.item}>
-                <Text >{item.title}</Text>
-                <Text >{item.amount}</Text>
-                <Button mode="contained" icon="trash-can" title="delete" onPress={() => handleDelete(item)} >Delete</Button>
+                <Card.Title
+                 title={item.title}
+                 subtitle={item.amount}
+                 right={(item) => (
+                    <IconButton
+                      icon="trash-can"
+                      onPress={() => handleDelete(item)}
+                      />
+                 )}/>
+                    
+                  
+                 
+                
+                 <Button mode="contained" icon="trash-can" title="delete" onPress={() => handleDelete(item)} >Delete</Button>
               </Card.Content >
             </Card >
 
@@ -137,23 +127,27 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    
-    
   },
   inputs: {
     flex: 1,
-    // flexDirection: "column",
-    // alignItems: "center",
-    // borderWidth: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  
   },
   inputfield: {
-    // width: "100%",
-    // borderWidth: 0.5,
-    // padding: 10,
-    // marginVertical: 10,
-    // borderWidth: 1,
+    width: "80%",
+    backgroundColor: "white",
+    padding: 10,
+    marginVertical: 10,
+
+  },
+  savebutton : {
+    width: "40%",
+    borderRadius: 0,
+    alignSelf: "center"
   },
   item: {
-    // borderWidth: 1,
+
+    borderWidth: 1,
   },
 });
