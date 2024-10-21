@@ -93,6 +93,7 @@ export default function App() {
         </View>
 
         <FlatList
+          style={styles.list}
           renderItem={({ item }) =>
             <Card  >
               <Card.Content style={styles.item}>
@@ -125,26 +126,30 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   inputs: {
-    flex: 1,
+    // flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    margin: 10,
   
   },
   inputfield: {
     width: "80%",
     backgroundColor: "white",
-    padding: 10,
-    marginVertical: 10,
+    margin: 10,
+    // marginVertical: 10,
 
   },
   savebutton : {
+    
     width: "40%",
     borderRadius: 0,
     alignSelf: "center",
-    margin: 20,
+    margin: 10,
   },
   item: {
-
     // borderWidth: 1,
   },
+  list: {
+    flex:1,
+  }
 });
