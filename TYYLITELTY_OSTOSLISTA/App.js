@@ -99,21 +99,17 @@ export default function App() {
                 <Card.Title
                  title={item.title}
                  subtitle={item.amount}
-                 right={(item) => (
+                 right={(props) => (
                     <IconButton
+                      {...props}
+                      iconColor="red"
                       icon="trash-can"
                       onPress={() => handleDelete(item)}
                       />
                  )}/>
-                    
-                  
-                 
-                
-                 <Button mode="contained" icon="trash-can" title="delete" onPress={() => handleDelete(item)} >Delete</Button>
+                 {/* <Button mode="contained" icon="trash-can" title="delete" onPress={() => handleDelete(item)} >Delete</Button> */}
               </Card.Content >
             </Card >
-
-
           }
           data={items} />
 
@@ -144,10 +140,11 @@ const styles = StyleSheet.create({
   savebutton : {
     width: "40%",
     borderRadius: 0,
-    alignSelf: "center"
+    alignSelf: "center",
+    margin: 20,
   },
   item: {
 
-    borderWidth: 1,
+    // borderWidth: 1,
   },
 });
