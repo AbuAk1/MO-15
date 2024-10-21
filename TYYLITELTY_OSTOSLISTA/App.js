@@ -1,15 +1,19 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, FlatList, Alert } from "react-native";
+import { StyleSheet, View, FlatList, Alert,SafeAreaView } from "react-native";
 import { useState, useEffect } from "react";
 
 
 import { app } from "./firebaseConfig";
 import { getDatabase, ref, push, onValue, remove, get } from "firebase/database";
-import { Appbar, PaperProvider, TextInput, Button, Card } from "react-native-paper";
+import {  PaperProvider, TextInput, Button, Card, Text } from "react-native-paper";
+
+import Bar  from "./Bar";
 
 export default function App() {
+  
   const [firstUnderlineColor, setFirstUnderlineColor] = useState("grey");
   const [secondUnderlineColor, setsecondUnderlineColor] = useState("grey");
+
   const handleFirstFocus = () => {
     setFirstUnderlineColor("#03fcfc");
   };
@@ -70,16 +74,14 @@ export default function App() {
 
   }
 
-
-
   return (
-    <PaperProvider>
-
-      <Appbar.Header  >
-        <Appbar.Content style={{ backgroundColor: 'blue' }} titleStyle={{ color: "white", textAlign: "center" }} title="Shopping List" mode="large" />
-      </Appbar.Header>
-
+    <PaperProvider  >
+      <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+      <StatusBar style="light"  />
+      
       <View style={styles.container}>
+      <Bar/>
+
         <View style={styles.inputs}>
           <TextInput
             style={[styles.inputfield, { underlineColorAndroid: firstUnderlineColor }]}
@@ -97,7 +99,6 @@ export default function App() {
             style={[styles.inputfield, { underlineColorAndroid: secondUnderlineColor }]}
             label="Quantity"
             value={product.amount}
-
             underlineColorAndroid={secondUnderlineColor}
             onFocus={handleSecondFocus}
             onBlur={handleSecondBlur}
@@ -112,22 +113,13 @@ export default function App() {
           <Button mode="contained" icon="content-save" title="Save" onPress={handleSave} >Save</Button>
         </View>
 
-        {/* <Text style={styles.text}>Shopping List</Text> */}
-
         <FlatList
           renderItem={({ item }) =>
-
-            // <View style={styles.item}>
-            //   <Text style={{ fontSize: 18 }}>{item.title}, {item.amount} 
-            //   <Text style={styles.link} onPress={() => handleDelete(item)} > delete</Text>
-            //   </Text>
-            // </View>
-
             <Card  >
-              <Card.Content  style={styles.item}>
-                
-                <Text >{item.title}, {item.amount}</Text>
-                <Text  style={styles.link} onPress={() => handleDelete(item)} > delete</Text>
+              <Card.Content style={styles.item}>
+                <Text >{item.title}</Text>
+                <Text >{item.amount}</Text>
+                <Button mode="contained" icon="trash-can" title="delete" onPress={() => handleDelete(item)} >Delete</Button>
               </Card.Content >
             </Card >
 
@@ -135,9 +127,9 @@ export default function App() {
           }
           data={items} />
 
-      </View>
       <StatusBar style="auto" />
-
+      </View>
+      </SafeAreaView>
     </PaperProvider>
   );
 }
@@ -145,45 +137,23 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "column",
-    alignItems: "center",
-
+    
+    
   },
   inputs: {
-    flexDirection: "column",
-    alignItems: "center",
-    width: "80%",
+    flex: 1,
+    // flexDirection: "column",
+    // alignItems: "center",
+    // borderWidth: 1,
   },
   inputfield: {
-    width: "100%",
-    borderWidth: 0.5,
-    padding: 10,
-    marginVertical: 10,
-  },
-  buttons: {
-    // flexDirection: "row",
-    // justifyContent: "center",
-    // marginTop: 20,
-    // width: "50%",
-  },
-  text: {
-    fontWeight: "bold",
-    fontSize: 18,
-    color: "#3458eb",
-    // paddingTop: 20,
+    // width: "100%",
+    // borderWidth: 0.5,
+    // padding: 10,
+    // marginVertical: 10,
+    // borderWidth: 1,
   },
   item: {
-    flexDirection: "column",
-    // textAlign: 'left',
-    fontWeight: "bold",
-    padding: 2,
-    marginVertical: 2,
-    width: "100%",
-
-  },
-  link: {
-    color: "blue",
-    textDecorationLine: "none",
-    fontSize: 18,
+    // borderWidth: 1,
   },
 });
