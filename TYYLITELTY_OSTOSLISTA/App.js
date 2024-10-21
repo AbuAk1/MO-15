@@ -1,26 +1,16 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, TextInput, Text, View, FlatList, KeyboardAvoidingView, Platform, TouchableOpacity, Button ,Alert} from "react-native";
+import { StyleSheet, View, FlatList, Alert,SafeAreaView } from "react-native";
 import { useState, useEffect } from "react";
+
 
 import { app } from "./firebaseConfig";
 import { getDatabase, ref, push, onValue, remove, get } from "firebase/database";
+import {  PaperProvider, TextInput, Button, Card, Text, IconButton } from "react-native-paper";
+
+import Bar  from "./Bar";
 
 export default function App() {
-  const [firstUnderlineColor, setFirstUnderlineColor] = useState("grey");
-  const [secondUnderlineColor, setsecondUnderlineColor] = useState("grey");
-  const handleFirstFocus = () => {
-    setFirstUnderlineColor("#03fcfc");
-  };
-  const handleFirstBlur = () => {
-    setFirstUnderlineColor("grey");
-  };
-  const handleSecondFocus = () => {
-    setsecondUnderlineColor("#03fcfc");
-  };
-  const handleSecondBlur = () => {
-    setsecondUnderlineColor("grey");
-  };
-
+  
   const [product, setProduct] = useState({
     title: '',
     amount: ''
@@ -37,8 +27,8 @@ export default function App() {
       if (data) {
         const dataItems = Object.keys(data).map(key => {
           return {
-            id: key,          
-            ...data[key]      
+            id: key,
+            ...data[key]
           };
         });
         // console.log(dataItems);
@@ -68,101 +58,98 @@ export default function App() {
 
   }
 
-
-
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={100}
-    >
-      <View style={styles.inputs}>
-        <TextInput
-          style={[styles.inputfield, { underlineColorAndroid: firstUnderlineColor }]}
-          underlineColorAndroid={firstUnderlineColor}
-          onFocus={handleFirstFocus}
-          onBlur={handleFirstBlur}
-          onChangeText={text => setProduct({ ...product, title: text })}
-          value={product.title}
-          placeholder="Product"
-          keyboardType="default"
-        />
-        <TextInput
-          style={[styles.inputfield, { underlineColorAndroid: secondUnderlineColor }]}
-          value={product.amount}
-          underlineColorAndroid={secondUnderlineColor}
-          onFocus={handleSecondFocus}
-          onBlur={handleSecondBlur}
-          onChangeText={text => setProduct({ ...product, amount: text })}
-          placeholder="Quantity"
-          keyboardType="default"
-        />
-      </View>
+    <PaperProvider  >
+      <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+      <StatusBar style="light"  />
+      
+      <Bar/>
+      <View style={styles.container}>
 
-      <View style={styles.buttons}>
-        <Button title="Save" onPress={handleSave} />
-      </View>
+        <View style={styles.inputs}>
 
-      <Text style={styles.text}>Shopping List</Text>
+          <TextInput
+            style={styles.inputfield}
+            label="Product"
+            onChangeText={text => setProduct({ ...product, title: text })}
+            value={product.title}
+            mode="flat"
+            placeholder="Product"
+            keyboardType="default"
+          />
+          <TextInput
+            style={styles.inputfield}
+            label="Quantity"
+            value={product.amount}
+            mode="flat"
+            onChangeText={text => setProduct({ ...product, amount: text })}
+            placeholder="Quantity"
+            keyboardType="default"
+          />
+        </View>
 
-      <FlatList
-        renderItem={({ item }) =>
-          <View style={styles.item}>
-            <Text style={{ fontSize: 18 }}>{item.title}, {item.amount} 
-            <Text style={styles.link} onPress={() => handleDelete(item)} > delete</Text>
-            </Text>
-          </View>}
-        data={items} />
+        <View >
+          <Button style={styles.savebutton} mode="contained" icon="content-save" title="Save" onPress={handleSave} >Save</Button>
+        </View>
+
+        <FlatList
+          style={styles.list}
+          renderItem={({ item }) =>
+            <Card  >
+              <Card.Content style={styles.item}>
+                <Card.Title
+                 title={item.title}
+                 subtitle={item.amount}
+                 right={(props) => (
+                    <IconButton
+                      {...props}
+                      iconColor="red"
+                      icon="trash-can"
+                      onPress={() => handleDelete(item)}
+                      />
+                 )}/>
+                 {/* <Button mode="contained" icon="trash-can" title="delete" onPress={() => handleDelete(item)} >Delete</Button> */}
+              </Card.Content >
+            </Card >
+          }
+          data={items} />
 
       <StatusBar style="auto" />
-    </KeyboardAvoidingView>
+      </View>
+      </SafeAreaView>
+    </PaperProvider>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "column",
-    alignItems: "center",
-    backgroundColor: "white",
-    marginTop: "20%",
   },
   inputs: {
-    flexDirection: "column",
+    // flex: 1,
+    justifyContent: "center",
     alignItems: "center",
-    width: "80%",
+    margin: 10,
+  
   },
   inputfield: {
-    width: "100%",
-    borderWidth: 0.5,
-    borderBlockColor: "grey",
-    padding: 10,
-    marginVertical: 10,
-  },
-  buttons: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginTop: 20,
-    width: "50%",
-  },
-  text: {
-    fontWeight: "bold",
-    fontSize: 18,
-    color: "#3458eb",
-    paddingTop: 20,
-  },
-  item: {
-    flexDirection: "row",
-    textAlign: 'left',
-    fontWeight: "bold",
-    padding: 2,
-    marginVertical: 2,
-    width: "100%",
+    width: "80%",
+    backgroundColor: "white",
+    margin: 10,
+    // marginVertical: 10,
 
   },
-  link: {
-    color: "blue",
-    textDecorationLine: "none",
-    fontSize: 18,
+  savebutton : {
+    
+    width: "40%",
+    borderRadius: 0,
+    alignSelf: "center",
+    margin: 10,
   },
+  item: {
+    // borderWidth: 1,
+  },
+  list: {
+    flex:1,
+  }
 });
